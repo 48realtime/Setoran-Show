@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setoran Orderan - Realtime48</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f1f5f9;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+        }
+        .input-field {
+            background: #0f172a !important;
+            border: 1px solid #475569 !important;
+            color: #f1f5f9 !important;
+            transition: border-color 0.2s;
+        }
+        .input-field:focus {
+            border-color: #fbbf24 !important;
+            outline: none;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+            color: #000;
+        }
+        .btn-gold:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        .list-item {
+            background: #334155;
+            border-left: 4px solid #fbbf24;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-10">
+
+    <div class="max-w-md mx-auto px-4 pt-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-600">
+                SETORAN ORDERAN
+            </h1>
+            <p class="text-slate-400 text-sm tracking-widest mt-1">REALTIME48</p>
+        </header>
+
+        <!-- Panduan Penggunaan -->
+        <section class="card p-5 mb-6 border-amber-500/30 border">
+            <h2 class="text-amber-500 font-bold mb-3 flex items-center gap-2">
+                <i data-lucide="help-circle" class="w-5 h-5"></i>
+                Panduan Penggunaan
+            </h2>
+            <ul class="text-xs text-slate-300 space-y-2 leading-relaxed">
+                <li class="flex gap-2"><span>1.</span> Masukkan nomor WhatsApp tujuan (admin/grup).</li>
+                <li class="flex gap-2"><span>2.</span> Tambahkan detail orderan ke daftar di bawah.</li>
+                <li class="flex gap-2"><span>3.</span> Untuk memasukkan lebih dari 1 orderan, bisa masukkan data orderan beberapa kali dengan mengklik "Tambah Ke Daftar" serta mengubah show, tanggal dan jumlah orderan dan anda dapat memasukkan banyak item ke keranjang.</li>
+                <li class="flex gap-2 font-semibold text-amber-400"><span>4.</span> Klik <strong>Konfirmasi & Kirim</strong>.</li>
+                <li class="flex gap-2 text-slate-400 italic"><span>*</span> Laporan otomatis mengetag <strong>@me48</strong>. Silakan tempel (paste) jika teks tidak muncul otomatis.</li>
+            </ul>
+        </section>
+
+        <!-- Form Admin -->
+        <section class="card p-5 mb-6">
+            <div class="flex items-center gap-2 mb-4 text-amber-500 font-semibold">
+                <i data-lucide="user-cog" class="w-5 h-5"></i>
+                <h2>Tujuan Pengiriman</h2>
+            </div>
+            <div>
+                <label class="block text-xs text-slate-400 mb-1">Nomor WhatsApp Tujuan (Tanpa Simbol)</label>
+                <input type="number" id="adminPhone" value="6288809048431" placeholder="628..." class="w-full p-3 input-field rounded-lg">
+                <p class="text-[10px] text-slate-500 mt-2 italic">* Laporan otomatis akan mengetag admin <strong>me48</strong></p>
+            </div>
+        </section>
+
+        <!-- Form Order -->
+        <section class="card p-5 mb-6">
+            <div class="flex items-center gap-2 mb-4 text-amber-500 font-semibold">
+                <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                <h2>Input Orderan</h2>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Nama Show</label>
+                    <select id="showSelect" class="w-full p-3 input-field rounded-lg">
+                        <option value="">-- Pilih Show --</option>
+                        <option value="Cara Meminum Ramune">Cara Meminum Ramune</option>
+                        <option value="Pertaruhan Cinta">Pertaruhan Cinta</option>
+                        <option value="Te Wo Tsunaginagara">Te Wo Tsunaginagara</option>
+                        <option value="Pajama Drive">Pajama Drive</option>
+                    </select>
+                </div>
+
+                <div>
+                    <input type="text" id="showAlt" placeholder="Atau tulis nama show lainnya..." class="w-full p-3 input-field rounded-lg">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Tanggal</label>
+                        <input type="number" id="showDate" placeholder="Tgl" class="w-full p-3 input-field rounded-lg">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Jumlah</label>
+                        <input type="number" id="showQty" placeholder="Qty" class="w-full p-3 input-field rounded-lg">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-400 mb-1">Kategori Harga</label>
+                    <select id="showType" class="w-full p-3 input-field rounded-lg">
+                        <option value="5000">Reguler (5.000)</option>
+                        <option value="6000">Spesial (6.000)</option>
+                        <option value="8000">Khusus (8.000)</option>
+                        <option value="10000">Anniversary (10.000)</option>
+                    </select>
+                </div>
+
+                <button onclick="addToOrder()" class="w-full btn-gold font-bold py-3 rounded-xl transition shadow-lg flex items-center justify-center gap-2">
+                    <i data-lucide="list-plus" class="w-5 h-5"></i>
+                    Tambah ke Daftar
+                </button>
+            </div>
+        </section>
+
+        <!-- Daftar Orderan -->
+        <section class="card p-5">
+            <div class="flex justify-between items-center mb-4">
+                <div class="flex items-center gap-2 text-amber-500 font-semibold">
+                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                    <h2>Daftar Order</h2>
+                </div>
+                <span id="orderCount" class="text-xs bg-slate-700 px-2 py-1 rounded-full text-slate-300">0 Item</span>
+            </div>
+
+            <div id="orderList" class="space-y-3 min-h-[100px] mb-6">
+                <p class="text-slate-500 text-center text-sm py-10">Belum ada data.</p>
+            </div>
+
+            <div class="border-t border-slate-700 pt-4">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-slate-400 text-sm">Total Bayar:</span>
+                    <span id="totalPrice" class="text-xl font-bold text-amber-400">Rp 0</span>
+                </div>
+                <button onclick="sendToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-xl flex flex-col items-center justify-center shadow-lg transition">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                        Konfirmasi & Kirim
+                    </div>
+                    <span class="text-[10px] opacity-75 font-normal mt-1">(Tag Admin: @me48)</span>
+                </button>
+            </div>
+        </section>
+
+        <p class="text-center text-slate-500 text-[10px] mt-6 uppercase tracking-wider">
+            Realtime48 Order System
+        </p>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-amber-500 text-black px-6 py-3 rounded-full font-bold text-sm shadow-2xl hidden transition-all z-50 flex items-center gap-2">
+        <i data-lucide="copy" class="w-4 h-4"></i>
+        Teks disalin & Membuka WhatsApp...
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        let orders = [];
+
+        function addToOrder() {
+            const showSelect = document.getElementById('showSelect').value;
+            const showAlt = document.getElementById('showAlt').value;
+            const date = document.getElementById('showDate').value;
+            const qty = parseInt(document.getElementById('showQty').value);
+            const price = parseInt(document.getElementById('showType').value);
+            const typeText = document.getElementById('showType').options[document.getElementById('showType').selectedIndex].text.split(' (')[0];
+
+            const showName = showAlt || showSelect;
+
+            if (!showName || !date || isNaN(qty) || qty <= 0) {
+                alert("Mohon lengkapi Nama Show, Tanggal, dan Jumlah!");
+                return;
+            }
+
+            orders.push({
+                name: showName,
+                date: parseInt(date),
+                qty: qty,
+                price: price,
+                type: typeText
+            });
+
+            document.getElementById('showDate').value = "";
+            document.getElementById('showQty').value = "";
+            document.getElementById('showAlt').value = "";
+            
+            renderOrders();
+        }
+
+        function removeOrder(index) {
+            orders.splice(index, 1);
+            renderOrders();
+        }
+
+        function renderOrders() {
+            const listDiv = document.getElementById('orderList');
+            const totalDiv = document.getElementById('totalPrice');
+            const countSpan = document.getElementById('orderCount');
+            
+            countSpan.innerText = `${orders.length} Item`;
+
+            if (orders.length === 0) {
+                listDiv.innerHTML = '<p class="text-slate-500 text-center text-sm py-10">Belum ada data.</p>';
+                totalDiv.innerText = "Rp 0";
+                return;
+            }
+
+            orders.sort((a, b) => a.name.localeCompare(b.name) || a.date - b.date);
+
+            let html = "";
+            let total = 0;
+
+            orders.forEach((order, index) => {
+                const subtotal = order.price * order.qty;
+                total += subtotal;
+                html += `
+                    <div class="list-item p-3 flex justify-between items-center rounded-lg shadow-sm">
+                        <div class="overflow-hidden">
+                            <div class="font-bold text-amber-100 truncate text-sm">${order.name}</div>
+                            <div class="text-[10px] text-slate-400">Tgl ${order.date} • ${order.qty} pcs</div>
+                        </div>
+                        <div class="flex items-center gap-3 ml-2">
+                            <span class="text-xs font-mono font-bold text-amber-400">Rp ${subtotal.toLocaleString()}</span>
+                            <button onclick="removeOrder(${index})" class="text-rose-400 p-1">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            listDiv.innerHTML = html;
+            totalDiv.innerText = `Rp ${total.toLocaleString()}`;
+            lucide.createIcons();
+        }
+
+        function sendToWhatsApp() {
+            const targetPhone = document.getElementById('adminPhone').value;
+            const groupLink = "https://chat.whatsapp.com/LWuZRg24VnZIrNBEYmcsUX";
+            
+            if (orders.length === 0) {
+                alert("Daftar orderan masih kosong!");
+                return;
+            }
+
+            const grouped = {};
+            let grandTotal = 0;
+
+            orders.forEach(order => {
+                if (!grouped[order.name]) grouped[order.name] = [];
+                grouped[order.name].push(order);
+                grandTotal += (order.price * order.qty);
+            });
+
+            let message = "*KONFIRMASI SETORAN ORDERAN*\n";
+            message += "============================\n\n";
+
+            for (const showName in grouped) {
+                message += `*Show:* ${showName}\n`;
+                grouped[showName].forEach(item => {
+                    message += `• Tgl ${item.date} (${item.qty} pcs)\n`;
+                });
+                message += "\n";
+            }
+
+            message += `*Total Pembayaran:* Rp ${grandTotal.toLocaleString()}\n\n`;
+            
+            // Menggunakan tag nama me48 sesuai permintaan
+            message += `cc: @me48\n`;
+            message += "Mohon segera diproses admin. Terima kasih! 🙏";
+
+            // Salin Teks ke Clipboard
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = message;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            // Tampilkan Notifikasi
+            const toast = document.getElementById('toast');
+            toast.classList.remove('hidden');
+            
+            setTimeout(() => {
+                toast.classList.add('hidden');
+                
+                // Jika input nomor tujuan adalah nomor grup link atau nomor admin tertentu
+                const waUrl = `https://wa.me/${targetPhone}?text=${encodeURIComponent(message)}`;
+                
+                // Prioritas membuka chat langsung jika nomor diisi, atau link grup jika sesuai
+                if (targetPhone === "6288809048431") {
+                    window.open(groupLink, '_blank');
+                } else {
+                    window.open(waUrl, '_blank');
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
